@@ -5,6 +5,12 @@ import java.util.*;
 public class Bot {
     public static Twitter twitter = TwitterFactory.getSingleton();
 
+
+    /**
+     * répond au tweet
+     * @param text
+     * @param id
+     */
     public static void replyTweet(String text, String id) {
         try {
             Status status = twitter.updateStatus(
@@ -18,6 +24,11 @@ public class Bot {
         }
     }
 
+    /**
+     * renvoie l'url d'un tweet
+     * @param statusId
+     * @return
+     */
     public static String fetchMedia(String statusId) {
         String mediaUrl = "";
         try{
@@ -48,10 +59,15 @@ public class Bot {
         return bitrate.get(bitrate.size()-1);
     }
 
+    /**
+     * renvoie une map des tweet et id mentionnant le bot
+     * @param lastId
+     * @return map(tweet, id_tweet)
+     */
     public static Map<String, String> findMentions(String lastId) {
 
         Map<String,String> statusId = new HashMap<>();
-        Paging paging = new Paging();
+        Paging paging = new Paging(); //Controls pagination
         paging.count(200);
 
         try {
@@ -59,11 +75,13 @@ public class Bot {
             if (!lastId.isEmpty()){
                 paging.setSinceId(Long.parseLong(lastId));
             }
-  
+
+            //Retreives a list of mentions
             List<Status> mentionList = twitter.getMentionsTimeline(paging);
             
             String tweetReferenced = "-1";
-            
+
+            //Parcourt la liste des tweets faisant la mention du bot
             for (Status tweet : mentionList) {
                 
                 if (tweet.getQuotedStatus() != null){
@@ -97,6 +115,12 @@ public class Bot {
         return statusId;
     }
 
+    /**
+     *
+     * @param username
+     * @param tweetId
+     * @return tweet avec lien media
+     */
     public static String tweetMessage(String username, String tweetId){
         String userMention = "@" + username;
         String[] messages = {"Yes! video, it's here: ", "Alright, i got this: ", "Video? Here we go: ", "Yes! video is ready: ", "Yes, Video! At your service: "};
