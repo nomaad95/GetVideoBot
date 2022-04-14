@@ -6,6 +6,15 @@ public class DBHelper {
     private static Connection connection;
     private static final String DATABASE = ReadProperty.getValue("mysql.db");
 
+    /**
+     * sauvegarde un tweet en base de donnée
+     * @param username
+     * @param mentionId
+     * @param mediaTweetId
+     * @param mediaUrl
+     * @param mediaTweetUser
+     * @param mediaTweetText
+     */
     public static void saveTweet(String username, String mentionId, String mediaTweetId, String mediaUrl, String mediaTweetUser, String mediaTweetText) {
         String sql = "INSERT INTO tweet_records(username, mention_id, media_tweet_id, media_url, media_tweet_user, media_tweet_text) VALUES(?,?,?,?,?,?)";
         try {
@@ -24,6 +33,11 @@ public class DBHelper {
         }
     }
 
+    /**
+     * renvoie l'id de l'auteur d'un tweet
+     * @param mentionId
+     * @return
+     */
     public static String getMention(String mentionId) {
         StringBuilder mention = new StringBuilder();
         try {
@@ -41,6 +55,10 @@ public class DBHelper {
         return mention.toString();
     }
 
+    /**
+     * renvoie l'id de l'auteur du dernier tweet enregistré en base
+     * @return user id
+     */
     public static String lastSearchId() {
         StringBuilder sinceId = new StringBuilder();
         try {
